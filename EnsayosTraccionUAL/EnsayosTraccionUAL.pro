@@ -20,4 +20,5 @@ HEADERS  += mainwindow.h
 FORMS    += mainwindow.ui
 
 RESOURCES += \
-    libredaqstudio.qrc
+    libredaqstudio.qrc \
+    EnsayosTraccionUAL.qrc

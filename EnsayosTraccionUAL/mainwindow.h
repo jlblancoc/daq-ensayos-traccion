@@ -30,6 +30,9 @@ public:
 
 private slots:
 	void on_actionRe_scan_devices_triggered();
+	void on_actionCapture_triggered();
+	void on_actionStop_triggered();
+	void on_btnCapturar_clicked();
 
 private:
 	Ui::MainWindow *ui;
