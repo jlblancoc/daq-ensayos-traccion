@@ -6,6 +6,8 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Instruct CMake to run moc automatically when needed.
 set(CMAKE_AUTOMOC ON)
 
+find_package(MRPT QUIET COMPONENTS base)  # Find MRPT just to forward that path to the external project
+
 find_package(Qt5Widgets QUIET)  # Find the QtWidgets library
 IF (NOT Qt5Widgets_FOUND)
 	MESSAGE(STATUS "*WARNING* Qt5 not found. Cannot build this project. \n  Add the installation prefix of Qt5Widgets to CMAKE_PREFIX_PATH \n  or set Qt5Widgets_DIR to a directory containing one of the above files, typically: 'C:\\Qt\\5.X\\msvcXXXX_64\\lib\\cmake\\Qt5Widgets'")
@@ -18,7 +20,11 @@ ELSE()
 		PREFIX 3rdparty
 		GIT_REPOSITORY "https://github.com/ual-arm-ros-pkg/arduino-daq-ros-pkg.git"
 		GIT_TAG "master"
-		CMAKE_ARGS -DBUILD_ROS=OFF -DBUILD_STANDALONE_LIB=ON
+		CMAKE_ARGS 
+		"-DBUILD_ROS=OFF" 
+		"-DBUILD_STANDALONE_LIB=ON"
+		"-DMRPT_DIR=${MRPT_DIR}"
+		INSTALL_COMMAND ""
 	)	
 
 	# Define project:
