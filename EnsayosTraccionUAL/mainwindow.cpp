@@ -9,8 +9,11 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QtWidgets/qmessagebox.h>
+#include <QFileDialog>
+#include <mrpt/math/CMatrixD.h>
 
-QVector<double> plot_x, plot_y; // initialize with entries 0..100
+
+QVector<double> plot_t, plot_x, plot_y; // initialize with entries 0..100
 unsigned int uc_first_timestamp = 0;
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -66,6 +69,7 @@ void MainWindow::on_actionCapture_triggered()
 {
 	try
 	{
+		plot_t.clear();
 		plot_x.clear();
 		plot_y.clear();
 		uc_first_timestamp = 0;
@@ -102,7 +106,30 @@ void MainWindow::on_actionStop_triggered()
 
 void MainWindow::on_btnGrabar_clicked()
 {
+	try {
+		const size_t N = plot_t.size();
+		if (!N)
+			throw std::runtime_error("No hay datos capturados!");
 
+		auto fileName = QFileDialog::getSaveFileName(this,"Grabar log", ".", "Text files (*.txt)");
+		if (fileName.isEmpty())
+			return;
+
+		mrpt::math::CMatrixD M(N, 3);
+		for (unsigned int i = 0; i < N; i++)
+		{
+			M(i, 0) = plot_t[i];
+			M(i, 1) = plot_x[i];
+			M(i, 2) = plot_y[i];
+		}
+
+		M.saveToTextFile(fileName.toStdString());
+	}
+	catch (std::exception &e)
+	{
+		QMessageBox msg(QMessageBox::Critical, "Error", e.what(), QMessageBox::Ok, this);
+		msg.exec();
+	}
 }
 
 void MainWindow::on_btnCargar_clicked()
@@ -132,9 +159,10 @@ void MainWindow::on_adc_data(TFrame_ADC_readings_payload_t data)
 	}
 
 	const double t = (data.timestamp_ms - uc_first_timestamp)*1e-3;
-	const double v1 = data.adc_data[0] * 1.1 / 1023;
-	const double v2 = data.adc_data[1] * 1.1 / 1023;
+	const double v1 = data.adc_data[0] * (1.1 / 1023) /* ADC conv */  * 11 /* resistor divisor */;
+	const double v2 = data.adc_data[1] * (1.1 / 1023) /* ADC conv */ * 11 /* resistor divisor */;
 
+	plot_t.push_back(t);
 	plot_x.push_back(v1);
 	plot_y.push_back(v2);
 
