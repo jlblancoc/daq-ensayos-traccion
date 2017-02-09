@@ -77,7 +77,7 @@ void MainWindow::on_actionCapture_triggered()
 		TFrameCMD_ADC_start_payload_t adc_cfg;
 		adc_cfg.active_channels[0] = 0;
 		adc_cfg.active_channels[1] = 1;
-		adc_cfg.measure_period_ms = 200;
+		adc_cfg.measure_period_ms = 50;
 		adc_cfg.use_internal_refvolt = true;
 
 		m_arduino_daq.CMD_ADC_START(adc_cfg);

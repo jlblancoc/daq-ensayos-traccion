@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.1)
 project(EnsayosTraccionUAL)
 
+set(CMAKE_CXX_STANDARD 11)
+
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Instruct CMake to run moc automatically when needed.
@@ -44,9 +46,10 @@ ELSE()
 	link_directories("${CMAKE_BINARY_DIR}/3rdparty/src/arduino_daq_external-build/libarduinodaq")
 	include_directories("${CMAKE_BINARY_DIR}/3rdparty/src/arduino_daq_external/include")
 	include_directories("${CMAKE_BINARY_DIR}/3rdparty/src/arduino_daq_external/arduino_firmware/arduino_daq/arduino_daq")
+	include_directories("${CMAKE_SOURCE_DIR}/EnsayosTraccionUAL")
 	
 	# Tell CMake to create the helloworld executable
-	add_executable(${PROJECT_NAME} WIN32 
+	add_executable("${PROJECT_NAME}App" WIN32 
 		EnsayosTraccionUAL/main.cpp
 		EnsayosTraccionUAL/mainwindow.cpp 
 		EnsayosTraccionUAL/mainwindow.h
@@ -57,13 +60,13 @@ ELSE()
 		)
 
 	# Use the Widgets module from Qt 5.
-	target_link_libraries(${PROJECT_NAME}
+	target_link_libraries("${PROJECT_NAME}App"
 		Qt5::Widgets
 		Qt5::PrintSupport
 		${MRPT_LIBS}
 		arduinodaq
 		)
 
-	add_dependencies(${PROJECT_NAME} arduino_daq_external)
+	add_dependencies("${PROJECT_NAME}App" arduino_daq_external)
 
 ENDIF() # if qt not found
