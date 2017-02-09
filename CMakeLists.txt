@@ -20,9 +20,9 @@ ELSE()
 	# Search for "arduinodaq":
 	ExternalProject_Add(arduino_daq_external
 		PREFIX 3rdparty
-#		GIT_REPOSITORY "https://github.com/ual-arm-ros-pkg/arduino-daq-ros-pkg.git"
-#		GIT_TAG "master"
-		URL "D:/code/arduino-daq-ros-pkg"
+		GIT_REPOSITORY "https://github.com/ual-arm-ros-pkg/arduino-daq-ros-pkg.git"
+		GIT_TAG "master"
+#		URL "D:/code/arduino-daq-ros-pkg"
 		CMAKE_ARGS 
 		"-DBUILD_ROS=OFF" 
 		"-DBUILD_STANDALONE_LIB=ON"
