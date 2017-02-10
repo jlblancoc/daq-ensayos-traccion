@@ -1,2 +1,4 @@
 *.user
 EnsayosTraccionUAL/mainwindow.h.autosave
+*~
+build*
