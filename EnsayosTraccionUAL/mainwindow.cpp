@@ -175,7 +175,14 @@ void MainWindow::refresh_plot()
 {
 	const double scale_x = ui->comboBox->currentText().toDouble();
 	const double scale_y = ui->comboBox_2->currentText().toDouble();
+	
+/*
+% Fit con MATLAB: 0.5283 cm/V
+K_AL=0.5283e-2 / 0.5;  % 0.5 porque se midio con scale=1/2
 
+% Fondo de escala de fuerza: 60e3 kp / 10 voltios
+K_F = 60e3*9.81/10;
+*/
 	QVector<double> xs(plot_x.size()), ys(plot_x.size());
 	double max_x = 1.0, max_y = 1.0;
 	for (size_t i = 0; i < plot_x.size(); i++)
