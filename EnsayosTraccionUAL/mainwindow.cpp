@@ -11,6 +11,8 @@
 #include <QtWidgets/qmessagebox.h>
 #include <QFileDialog>
 #include <mrpt/math/CMatrixD.h>
+#include <mrpt/system/datetime.h>
+#include <mrpt/system/filesystem.h>
 
 
 QVector<double> plot_t, plot_x, plot_y; // initialize with entries 0..100
@@ -111,7 +113,9 @@ void MainWindow::on_btnGrabar_clicked()
 		if (!N)
 			throw std::runtime_error("No hay datos capturados!");
 
-		auto fileName = QFileDialog::getSaveFileName(this,"Grabar log", ".", "Text files (*.txt)");
+		const auto sDefaultFile = mrpt::system::fileNameStripInvalidChars(mrpt::system::dateTimeLocalToString(mrpt::system::now())) + std::string(".txt");
+
+		auto fileName = QFileDialog::getSaveFileName(this,"Grabar log", QString::fromStdString(sDefaultFile), "Text files (*.txt)");
 		if (fileName.isEmpty())
 			return;
 
@@ -173,8 +177,8 @@ void MainWindow::on_adc_data(TFrame_ADC_readings_payload_t data)
 
 void MainWindow::refresh_plot()
 {
-	const double scale_x = ui->comboBox->currentText().toDouble();
-	const double scale_y = ui->comboBox_2->currentText().toDouble();
+	const double scale_x = ui->comboBox->currentText().toDouble() * 0.5283e-2 / 0.5;
+	const double scale_y = ui->comboBox_2->currentText().toDouble() * 60e3*9.81 / 10;
 	
 /*
 % Fit con MATLAB: 0.5283 cm/V
